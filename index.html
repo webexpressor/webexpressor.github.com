@@ -1,0 +1,21 @@
+---
+layout: default
+---
+{% assign c = site.posts %}
+{% for post in c %}
+	<div class="post">
+		<div class="date">
+			<p><span>{{ post.date | date:"%d" }}</span> {{ post.date | date:"%m" }}/20{{ post.date | date:"%y" }}</p>
+		</div>
+		<div class="content">
+			<a href="{{post.url}}">{{post.title}}</a>
+	        <div class="description">{{post.description}}</div>
+		</div>
+		<div class="info">							
+			<p>
+				<span>分类：{{ post.categories }}</span>
+				<span>标签：{{ post.tags | join: ','}}</span>
+			</p>
+		</div>
+	</div>
+{% endfor %}
