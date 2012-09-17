@@ -1,1 +1,1 @@
-% include comments-providers/disqus %}
+{% include comments-providers/disqus %}
