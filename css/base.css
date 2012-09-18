@@ -91,7 +91,9 @@ ul.delimited li {
 	background: #f2f2f2;
 	margin-bottom: 40px;
 	padding: 15px 20px 15px 80px;
-	box-shadow: inset 0 0 10px rgba(0,0,0,0.3);
+	box-shadow: 0 0 5px rgba(0,0,0,0.2);
+	border: 1px solid #ccc;
+	border-radius: 5px;
 }
 
 .post .date{
@@ -164,11 +166,12 @@ ul.delimited li {
 }
 pre{
 	margin: 1em 0 1.5em 0;
-	font-size: 0.75em;
+	font-size: 1em;
+	font-family: Menlo, Monaco, "Andale Mono", "lucida console", "Courier New", monospace !important;
 	line-height: 1.5em;
 	color: #111;
-	background: ivory;
-	border: 1px solid #DDC;
+	/*background: #ccc;*/
+	border: 1px solid #ccc;
 	padding: 0.5em 1em;
 	overflow: hidden;
 	box-shadow: 1px 1px 6px #CCC;
