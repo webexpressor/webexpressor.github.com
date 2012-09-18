@@ -7,12 +7,13 @@ body{
 	background: url(../images/bg.jpg) repeat;
 	font-size: 14px;
 	position: relative;
+	font-family: "微软雅黑";
 }
 ul{
 	list-style: none;
 }
 a {
-	color: #396;
+	color: #000;
 	text-decoration: none;
 }
 header[role="main"] {
@@ -24,16 +25,20 @@ header[role="main"] {
 	padding-top: 8px;
 	z-index: 1000;
 }
+header[role="main"] div{
+	width: 960px;
+	margin: 0 auto;
+}
 #content[role="main"]{
-	width:1020px;
-	width:720px;
+	width:960px;
+	/*width:720px;*/
 	margin: 0 auto;
 	padding: 60px 0px;
 	position: relative;
 }
 
 #content section[role="main"]{
-	width: 720px;
+	width: 100%;
 	float: left;
 }
 
@@ -129,13 +134,10 @@ ul.delimited li {
 }
 
 /* 详情页面样式 */
-.page .header{
-	font-weight: bold;
-}
-.page > div{
+.page {
 	margin-bottom: 30px;
 	background: #F2F2F2;
-	padding: 24px;
+	padding: 30px 40px;
 	border-radius: 5px;
 	-webkit-box-shadow: 1px 1px 10px #CCC;
 	-moz-box-shadow: 1px 1px 10px #ccc;
@@ -143,4 +145,33 @@ ul.delimited li {
 	-o-box-shadow: 1px 1px 10px #ccc;
 	box-shadow: 1px 1px 10px #ccc;
 	line-height: 20px;
+	font-weight: normal;
+}
+.page header{
+	font-size: 36px;
+	margin-bottom: 30px;
+}
+.page .content h1{
+	font-size: 16px;
+	margin: 10px 0px;
+}
+.page .content p{
+	margin: 10px 0px;
+}
+.page .content{
+	border-bottom: 1px solid #ccc;
+	margin: 20px 0px;
+}
+pre{
+	margin: 1em 0 1.5em 0;
+	font-size: 0.75em;
+	line-height: 1.5em;
+	color: #111;
+	background: ivory;
+	border: 1px solid #DDC;
+	padding: 0.5em 1em;
+	overflow: hidden;
+	box-shadow: 1px 1px 6px #CCC;
+	-webkit-box-shadow: 1px 1px 6px #CCC;
+	-moz-box-shadow: 1px 1px 6px #CCC;
 }

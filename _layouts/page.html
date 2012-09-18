@@ -2,10 +2,8 @@
 layout: default
 ---
 <div class="page">
-	<div class="header">
-		<h1>{{ page.title }}</h1>
-	</div>
+	<header>{{ page.title }}</header>
 	<div class="content">{{ content }}</div>
-	<div class="comments">{% include comments %}</div>
+	{% include comments %}
 </div>
 
