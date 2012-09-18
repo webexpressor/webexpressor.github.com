@@ -4,6 +4,9 @@
 		<meta charset="utf-8"/>
 		<meta name="author" content="Liu Dong" />
 		<meta property="wb:webmaster" content="95df5d741703d83b" />
+		<!--[if lt IE 9]>
+	      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+	    <![endif]-->
 		<link rel="stylesheet" href="/css/base.css" type="text/css" />
 		<link rel="stylesheet" href="/css/syntax.css" type="text/css" />
 		<title>{{page.title}}</title>
@@ -34,6 +37,10 @@
 	            s.src = 'http://' + disqus_shortname + '.disqus.com/count.js';
 	            (document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
 	        }());
+
+		var _bdhmProtocol = (("https:" == document.location.protocol) ? " https://" : " http://");
+		document.write(unescape("%3Cscript src='" + _bdhmProtocol + "hm.baidu.com/h.js%3F512f2c73d9bfeaa9a55e270c5405a590' type='text/javascript'%3E%3C/script%3E"));
+
         </script>
 	</body>
 </html>

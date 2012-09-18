@@ -12,9 +12,12 @@ body{
 ul{
 	list-style: none;
 }
-a {
-	color: #000;
+a{
+	color: #2E9BD2;
 	text-decoration: none;
+}
+a:active, a:hover {
+	color: #FF4B33;
 }
 header[role="main"] {
 	background: url(../images/sprite.png) repeat-x;
@@ -133,7 +136,7 @@ ul.delimited li {
 	display: block;
 	font-size: 24px;
 	padding: 4px 0px;
-	color: #F9600A;
+	/*color: #F9600A;*/
 	font-size: 30px;
 }
 .post .content{
@@ -172,14 +175,22 @@ ul.delimited li {
 	/*text-align: center;*/
 	font-size: 30px;
 	padding: 10px;
-	color: #F9600A;
+	color: #2E9BD2;
 }
 .page header .info{
 	display: block;
 	padding:10px 0px;
 }
 .page .content h1{
+	font-size: 18px;
+	margin: 10px 0px;
+}
+.page .content h2{
 	font-size: 16px;
+	margin: 10px 0px;
+}
+.page .content h3{
+	font-size: 14px;
 	margin: 10px 0px;
 }
 .page .content p{
@@ -189,6 +200,7 @@ ul.delimited li {
 	border-bottom: 1px solid #ccc;
 	margin: 20px 0px;
 }
+
 pre{
 	margin: 1em 0 1.5em 0;
 	font-size: 1em;
