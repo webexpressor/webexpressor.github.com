@@ -2,7 +2,13 @@
 layout: default
 ---
 <div class="page">
-	<header>{{ page.title }}</header>
+	<header>
+		<div class="title">{{ page.title }}</div>
+		<div class="info">
+			分类：{{ page.categories }}  标签：{{ page.tags | join : ','}}
+		</div>
+		<div class="description">{{ page.description }}</div>
+	</header>
 	<div class="content">{{ content }}</div>
 	{% include comments %}
 </div>

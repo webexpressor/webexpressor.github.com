@@ -29,8 +29,13 @@ header[role="main"] div{
 	width: 960px;
 	margin: 0 auto;
 }
-header[role="main"] span{
+header[role="main"] span.left{
 	float: left;
+	display: block;
+	margin: 0px 10px;
+}
+header[role="main"] span.right{
+	float: right;
 	display: block;
 	margin: 0px 10px;
 }
@@ -119,7 +124,7 @@ ul.delimited li {
 	font-size:0.75em;
 }
 .post .date p span{
-	font-size:1.6875em;
+	font-size:26px;
 	display:block;
 	clear:both;
 }
@@ -127,7 +132,9 @@ ul.delimited li {
 .post a{
 	display: block;
 	font-size: 24px;
-	padding: 8px 0px;
+	padding: 4px 0px;
+	color: #F9600A;
+	font-size: 30px;
 }
 .post .content{
 	border-bottom:1px dotted #a9a9a9;
@@ -156,8 +163,20 @@ ul.delimited li {
 	font-weight: normal;
 }
 .page header{
-	font-size: 36px;
+	font-size: 16px;
+	border-left: 4px solid #D7D7D7;
+	padding-left: 10px; 
 	margin-bottom: 30px;
+}
+.page header .title{
+	/*text-align: center;*/
+	font-size: 30px;
+	padding: 10px;
+	color: #F9600A;
+}
+.page header .info{
+	display: block;
+	padding:10px 0px;
 }
 .page .content h1{
 	font-size: 16px;
@@ -183,4 +202,21 @@ pre{
 	box-shadow: 1px 1px 6px #CCC;
 	-webkit-box-shadow: 1px 1px 6px #CCC;
 	-moz-box-shadow: 1px 1px 6px #CCC;
+}
+
+.threeD{
+	 font:normal 20px Arial;
+	 color:#FFFFFF;
+	 text-shadow: 0 2px 0 #EAB0B6,
+				 0 2px 0 #c9c9c9,
+				 0 3px 0 #bbb,
+				 0 4px 0 #b9b9b9,
+				 0 5px 0 #aaa,
+				 0 6px 1px rgba(0,0,0,.1),
+				 0 0 5px rgba(0,0,0,.1),
+				 0 1px 3px rgba(0,0,0,.3),
+				 0 3px 5px rgba(0,0,0,.2),
+				 0 5px 10px rgba(0,0,0,.5),
+				 0 10px 10px rgba(0,0,0,.3),
+				 0 20px 20px rgba(0,0,0,.4);
 }
