@@ -31,10 +31,10 @@ window.Todo = Backbone.Model.extend({
 });
 {% endhighlight%}
 
--模型创建时会最先调用initialize方法；
--defaults属性可以设置默认值；
--可以通过为属性绑定change事件来监听其值的改变
--与服务器交互的方法fetch、save、destroy
++ 模型创建时会最先调用initialize方法；
++ defaults属性可以设置默认值；
++ 可以通过为属性绑定change事件来监听其值的改变
++ 与服务器交互的方法fetch、save、destroy
 
 ## 2.2 Model Demo：
 {% highlight javascript %}
