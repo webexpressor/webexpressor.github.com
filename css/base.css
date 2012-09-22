@@ -262,3 +262,41 @@ ul.delimited li {
 	color:#11264f;
 }
 
+/*
+    webkit scroll bars
+*/
+
+pre::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+}
+
+pre::-webkit-scrollbar-button:start:decrement,
+pre::-webkit-scrollbar-button:end:increment {
+    display: block;
+    height: 0;
+    width: 0;
+}
+
+pre::-webkit-scrollbar-button:vertical:increment,
+pre::-webkit-scrollbar-button:horizontal:increment {
+    background-color: transparent;
+    display: block;
+    height: 0;
+    width: 0;
+}
+
+pre::-webkit-scrollbar-track-piece {
+    -webkit-border-radius: 3px;
+}
+
+pre::-webkit-scrollbar-thumb:vertical {
+    background-color: #aaa;
+    -webkit-border-radius: 3px;
+
+}
+
+pre::-webkit-scrollbar-thumb:horizontal {
+    background-color: #aaa;
+    -webkit-border-radius: 3px;
+}
