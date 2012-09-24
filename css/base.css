@@ -157,13 +157,16 @@ div.subject:nth-child(3n+1) {
 }
 .page header .title{
 	/*text-align: center;*/
-	font-size: 30px;
-	padding: 10px;
+	font-size: 22px;
 	color: #2E9BD2;
 }
 .page header .info{
 	display: block;
 	padding:10px 0px;
+}
+.page .content em{
+	font-weight: bold;
+	font-size: 15px;
 }
 .page .content h1{
 	font-size: 18px;
@@ -237,6 +240,7 @@ ul.delimited li {
 
 #table-content{
 	position: fixed;
+	width: 280px;
 	/*right: 100px;
 	top:200px;*/
 }

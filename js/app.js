@@ -50,3 +50,9 @@ $(function(){
 		offset:-50
 	});
 });
+
+$(window).bind("load resize", function(){
+    var w = $(window).height();
+    var h = $("#table-content").outerHeight();
+    $("#table-content").css("position",(w < h) ? ("relative") : ("fixed"));
+});
