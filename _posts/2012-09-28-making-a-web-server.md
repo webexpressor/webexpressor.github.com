@@ -243,10 +243,6 @@ fs.stat(f, function (err, stats) {
 
 可以为请求过来的path加上一个后缀，而我们的文件就是以该后缀结尾。
 
-*一些有用的modules：*
-
-* [Node-statice](https://gi thub.com/joyent/node/wiki/modules# wiki-web-fr ameworks-static)
-* [Routing modules](htt ps://www.github.com/joyent/node/wiki/m odules#wiki-web-frameworks-routers)
 
 
 
