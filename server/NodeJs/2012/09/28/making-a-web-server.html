@@ -1,0 +1,375 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8"/>
+		<meta name="author" content="Liu Dong" />
+		<meta property="wb:webmaster" content="95df5d741703d83b" />
+		<!--[if lt IE 9]>
+	      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+	    <![endif]-->
+		<link rel="stylesheet" href="/css/base.css" type="text/css" />
+		<link rel="stylesheet" href="/css/syntax.css" type="text/css" />
+		<title>Ch01:创建一个Web服务器</title>
+	</head>
+	<body>
+		<header role="main">
+			<div>
+				<a href="/"><span class="threeD">WebExpressor</span></a>
+				<span class="right"><script type="text/javascript" charset="utf-8">
+(function(){
+  var _w = 106 , _h = 24;
+  var param = {
+    url:location.href,
+    type:'5',
+    count:'', /**是否显示分享数，1显示(可选)*/
+    appkey:'', /**您申请的应用appkey,显示分享来源(可选)*/
+    title:'不像Java那样，nodejs中的web server和code是在一起的，也没有tomcat那么复杂的配置。通过几行代码就可以启动服务器。', /**分享的文字内容(可选，默认为所在页面的title)*/
+    pic:'', /**分享图片的路径(可选)*/
+    ralateUid:'1769773192', /**关联用户的UID，分享微博会@该用户(可选)*/
+  language:'zh_cn', /**设置语言，zh_cn|zh_tw(可选)*/
+    rnd:new Date().valueOf()
+  }
+  var temp = [];
+  for( var p in param ){
+    temp.push(p + '=' + encodeURIComponent( param[p] || '' ) )
+  }
+  document.write('<iframe allowTransparency="true" frameborder="0" scrolling="no" src="http://hits.sinajs.cn/A1/weiboshare.html?' + temp.join('&') + '" width="'+ _w+'" height="'+_h+'"></iframe>')
+})()
+</script></span>
+				<span class="right"><iframe width="63" height="24" frameborder="0" allowtransparency="true" marginwidth="0" marginheight="0" scrolling="no" border="0" src="http://widget.weibo.com/relationship/followbutton.php?language=zh_cn&width=63&height=24&uid=1769773192&style=1&btn=red&dpc=1"></iframe></span>
+			</div>
+		</header>
+		<div id="content" role="main">
+			<section role="main">
+<div class="page">
+	<header>
+		<div class="title">Ch01:创建一个Web服务器</div>
+		<div class="info">
+			分类：NodeJs  标签：nodejs-cookbook
+		</div>
+		<div class="description">不像Java那样，nodejs中的web server和code是在一起的，也没有tomcat那么复杂的配置。通过几行代码就可以启动服务器。</div>
+	</header>
+	<div class="content"><h1>1.创建一个Router</h1>
+
+<h2>1.1 创建服务器</h2>
+
+<p>新建server.js文件，代码如下：</p>
+
+<div class="highlight"><pre><code class="javascript"><span class="kd">var</span> <span class="nx">http</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;http&#39;</span><span class="p">);</span>
+<span class="nx">http</span><span class="p">.</span><span class="nx">createServer</span><span class="p">(</span><span class="kd">function</span> <span class="p">(</span><span class="nx">request</span><span class="p">,</span> <span class="nx">response</span><span class="p">)</span> <span class="p">{</span>
+  <span class="nx">response</span><span class="p">.</span><span class="nx">writeHead</span><span class="p">(</span><span class="mi">200</span><span class="p">,</span> <span class="p">{</span><span class="s1">&#39;Content-Type&#39;</span><span class="o">:</span> <span class="s1">&#39;text/html&#39;</span><span class="p">});</span> 
+  <span class="nx">response</span><span class="p">.</span><span class="nx">end</span><span class="p">(</span><span class="s1">&#39;Woohoo!&#39;</span><span class="p">);</span>
+<span class="p">}).</span><span class="nx">listen</span><span class="p">(</span><span class="mi">8080</span><span class="p">);</span>
+</code></pre>
+</div>
+
+
+<p>为了方便调试，安装 <a href="">hotnode</a></p>
+
+<div class="highlight"><pre><code class="javascript"><span class="nx">npm</span> <span class="nx">install</span> <span class="o">-</span><span class="nx">g</span> <span class="nx">hotnode</span>
+<span class="nx">hotnode</span> <span class="nx">server</span><span class="p">.</span><span class="nx">js</span>
+</code></pre>
+</div>
+
+
+<p>此时就可以通过http://localhost:8080来访问了，http://localhost:8080/someelse也可以访问，所以继续。。。</p>
+
+<h2>1.2 简单路由功能</h2>
+
+<p>路由就相当于java中的action，用于拦截用户请求。可以使用 <em>path</em> 模块中的 <em>basename</em> 方法来获取url尾斜杠部分。</p>
+
+<p>server.js代码改为：</p>
+
+<div class="highlight"><pre><code class="javascript"><span class="kd">var</span> <span class="nx">http</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;http&#39;</span><span class="p">);</span>
+<span class="kd">var</span> <span class="nx">path</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;path&#39;</span><span class="p">);</span>
+
+<span class="kd">var</span> <span class="nx">pages</span> <span class="o">=</span> <span class="p">[</span>
+  <span class="p">{</span><span class="nx">route</span><span class="o">:</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="nx">output</span><span class="o">:</span> <span class="s1">&#39;Woohoo!&#39;</span><span class="p">},</span>
+  <span class="p">{</span><span class="nx">route</span><span class="o">:</span> <span class="s1">&#39;about&#39;</span><span class="p">,</span> <span class="nx">output</span><span class="o">:</span> <span class="s1">&#39;A simple routing with Node example&#39;</span><span class="p">},</span>
+  <span class="p">{</span><span class="nx">route</span><span class="o">:</span> <span class="s1">&#39;another page&#39;</span><span class="p">,</span> <span class="nx">output</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span><span class="k">return</span> <span class="s1">&#39;Here\&#39;s &#39;</span><span class="o">+</span><span class="k">this</span><span class="p">.</span><span class="nx">route</span><span class="p">;}},</span>
+<span class="p">];</span>
+
+<span class="nx">http</span><span class="p">.</span><span class="nx">createServer</span><span class="p">(</span><span class="kd">function</span> <span class="p">(</span><span class="nx">request</span><span class="p">,</span> <span class="nx">response</span><span class="p">)</span> <span class="p">{</span>
+  <span class="kd">var</span> <span class="nx">lookup</span> <span class="o">=</span> <span class="nx">path</span><span class="p">.</span><span class="nx">basename</span><span class="p">(</span><span class="nb">decodeURI</span><span class="p">(</span><span class="nx">request</span><span class="p">.</span><span class="nx">url</span><span class="p">));</span>
+  <span class="nx">pages</span><span class="p">.</span><span class="nx">forEach</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">page</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nx">page</span><span class="p">.</span><span class="nx">route</span> <span class="o">===</span> <span class="nx">lookup</span><span class="p">)</span> <span class="p">{</span>
+      <span class="nx">response</span><span class="p">.</span><span class="nx">writeHead</span><span class="p">(</span><span class="mi">200</span><span class="p">,</span> <span class="p">{</span><span class="s1">&#39;Content-Type&#39;</span><span class="o">:</span> <span class="s1">&#39;text/html&#39;</span><span class="p">});</span>
+      <span class="nx">response</span><span class="p">.</span><span class="nx">end</span><span class="p">(</span><span class="k">typeof</span> <span class="nx">page</span><span class="p">.</span><span class="nx">output</span> <span class="o">===</span> <span class="s1">&#39;function&#39;</span>
+                   <span class="o">?</span> <span class="nx">page</span><span class="p">.</span><span class="nx">output</span><span class="p">()</span> <span class="o">:</span> <span class="nx">page</span><span class="p">.</span><span class="nx">output</span><span class="p">);</span>
+    <span class="p">}</span>
+  <span class="p">});</span>
+  <span class="c1">//所有逻辑处理完成后，如果response没有返回给客户端</span>
+  <span class="c1">//即response.finished为false</span>
+  <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">response</span><span class="p">.</span><span class="nx">finished</span><span class="p">)</span> <span class="p">{</span>
+     <span class="nx">response</span><span class="p">.</span><span class="nx">writeHead</span><span class="p">(</span><span class="mi">404</span><span class="p">);</span>
+     <span class="nx">response</span><span class="p">.</span><span class="nx">end</span><span class="p">(</span><span class="s1">&#39;Page Not Found!&#39;</span><span class="p">);</span>
+  <span class="p">}</span>
+<span class="p">}).</span><span class="nx">listen</span><span class="p">(</span><span class="mi">8080</span><span class="p">);</span>
+</code></pre>
+</div>
+
+
+<p>其中用到了ES5中的forEach，Node采用V8引擎，而它已经支持ES5。</p>
+
+<p>注意：这时我们只能处理simple-level形式的url（如：/about），如果要处理multilevel形式（如：/about/node）,需要移除path.basename。</p>
+
+<h2>1.3 解析querystring</h2>
+
+<p>会涉及到url.parse方法，它可以接受两个参数，第一个为url串，第二个如果为true，则内部实现会去加载querystring模块，最好将字符串解析为对象，我们操作起来就会很方便了。</p>
+
+<p>例如：解析该url：http://localhost:8080/about/node?id=1</p>
+
+<div class="highlight"><pre><code class="javascript"><span class="kd">var</span> <span class="nx">id</span> <span class="o">=</span> <span class="nx">url</span><span class="p">.</span><span class="nx">parse</span><span class="p">(</span><span class="nb">decodeURI</span><span class="p">(</span><span class="nx">request</span><span class="p">.</span><span class="nx">url</span><span class="p">),</span><span class="kc">true</span><span class="p">).</span><span class="nx">query</span><span class="p">.</span><span class="nx">id</span><span class="p">;</span>
+</code></pre>
+</div>
+
+
+<h1>2.处理静态文件</h1>
+
+<p>先准备些静态资源，创建一个content文件夹，在里面新建html、js、css文件</p>
+
+<p>主要用到fs模块，来访问文件。</p>
+
+<div class="highlight"><pre><code class="javascript"><span class="kd">var</span> <span class="nx">http</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;http&#39;</span><span class="p">);</span>
+<span class="kd">var</span> <span class="nx">path</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;path&#39;</span><span class="p">);</span>
+<span class="kd">var</span> <span class="nx">fs</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;fs&#39;</span><span class="p">);</span>
+
+<span class="kd">var</span> <span class="nx">mimeTypes</span> <span class="o">=</span> <span class="p">{</span>
+  <span class="s1">&#39;.js&#39;</span> <span class="o">:</span> <span class="s1">&#39;text/javascript&#39;</span><span class="p">,</span>
+  <span class="s1">&#39;.html&#39;</span><span class="o">:</span> <span class="s1">&#39;text/html&#39;</span><span class="p">,</span>
+  <span class="s1">&#39;.css&#39;</span> <span class="o">:</span> <span class="s1">&#39;text/css&#39;</span>
+<span class="p">};</span>
+
+<span class="nx">http</span><span class="p">.</span><span class="nx">createServer</span><span class="p">(</span><span class="kd">function</span> <span class="p">(</span><span class="nx">request</span><span class="p">,</span> <span class="nx">response</span><span class="p">)</span> <span class="p">{</span>
+  <span class="kd">var</span> <span class="nx">lookup</span> <span class="o">=</span> <span class="nx">path</span><span class="p">.</span><span class="nx">basename</span><span class="p">(</span><span class="nb">decodeURI</span><span class="p">(</span><span class="nx">request</span><span class="p">.</span><span class="nx">url</span><span class="p">))</span> <span class="o">||</span> <span class="s1">&#39;index.html&#39;</span><span class="p">,</span>
+    <span class="nx">f</span> <span class="o">=</span> <span class="s1">&#39;content/&#39;</span> <span class="o">+</span> <span class="nx">lookup</span><span class="p">;</span>
+  <span class="c1">//文件是否存在</span>
+  <span class="nx">fs</span><span class="p">.</span><span class="nx">exists</span><span class="p">(</span><span class="nx">f</span><span class="p">,</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">exists</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nx">exists</span><span class="p">)</span> <span class="p">{</span>
+      <span class="nx">fs</span><span class="p">.</span><span class="nx">readFile</span><span class="p">(</span><span class="nx">f</span><span class="p">,</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">data</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nx">err</span><span class="p">)</span> <span class="p">{</span> <span class="nx">response</span><span class="p">.</span><span class="nx">writeHead</span><span class="p">(</span><span class="mi">500</span><span class="p">);</span>
+          <span class="nx">response</span><span class="p">.</span><span class="nx">end</span><span class="p">(</span><span class="s1">&#39;Server Error!&#39;</span><span class="p">);</span>  
+          <span class="k">return</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="c1">//path.extname(&#39;about.html&#39;) --&gt; .html</span>
+        <span class="kd">var</span> <span class="nx">headers</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;Content-type&#39;</span><span class="o">:</span> <span class="nx">mimeTypes</span><span class="p">[</span><span class="nx">path</span><span class="p">.</span><span class="nx">extname</span><span class="p">(</span><span class="nx">lookup</span><span class="p">)]};</span>
+        <span class="nx">response</span><span class="p">.</span><span class="nx">writeHead</span><span class="p">(</span><span class="mi">200</span><span class="p">,</span> <span class="nx">headers</span><span class="p">);</span>
+        <span class="nx">response</span><span class="p">.</span><span class="nx">end</span><span class="p">(</span><span class="nx">data</span><span class="p">);</span>
+      <span class="p">});</span>
+      <span class="k">return</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="nx">response</span><span class="p">.</span><span class="nx">writeHead</span><span class="p">(</span><span class="mi">404</span><span class="p">);</span> <span class="c1">//no such file found!</span>
+    <span class="nx">response</span><span class="p">.</span><span class="nx">end</span><span class="p">();</span>
+  <span class="p">});</span>
+<span class="p">}).</span><span class="nx">listen</span><span class="p">(</span><span class="mi">8080</span><span class="p">);</span>
+</code></pre>
+</div>
+
+
+<p>这时就可以访问静态文件了。</p>
+
+<h1>3.在内存中缓存</h1>
+
+<p>上面的做法只是简单实现了功能，但是性能很差，用户的每次请求都需要从磁盘上读取文件。我们应该将它缓存起来，只需要第一次读取，之后其他用户访问就直接从内存返回。</p>
+
+<p>在处理静态文件例子代码之上修改为：</p>
+
+<div class="highlight"><pre><code class="javascript"><span class="c1">//增加缓存逻辑</span>
+<span class="kd">var</span> <span class="nx">cache</span> <span class="o">=</span> <span class="p">{};</span>
+<span class="c1">//f为要读取的文件，cb为回调 </span>
+<span class="kd">function</span> <span class="nx">cacheAndDeliver</span><span class="p">(</span><span class="nx">f</span><span class="p">,</span> <span class="nx">cb</span><span class="p">)</span> <span class="p">{</span>
+  <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">cache</span><span class="p">[</span><span class="nx">f</span><span class="p">])</span> <span class="p">{</span>
+    <span class="nx">fs</span><span class="p">.</span><span class="nx">readFile</span><span class="p">(</span><span class="nx">f</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">data</span><span class="p">)</span> <span class="p">{</span>
+      <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">err</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">cache</span><span class="p">[</span><span class="nx">f</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="nx">content</span><span class="o">:</span> <span class="nx">data</span><span class="p">}</span> <span class="p">;</span>
+      <span class="p">}</span>     
+      <span class="nx">cb</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">data</span><span class="p">);</span>
+    <span class="p">});</span>
+    <span class="k">return</span><span class="p">;</span>
+  <span class="p">}</span>
+  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;loading &#39;</span> <span class="o">+</span> <span class="nx">f</span> <span class="o">+</span> <span class="s1">&#39; from cache&#39;</span><span class="p">);</span>
+  <span class="nx">cb</span><span class="p">(</span><span class="kc">null</span><span class="p">,</span> <span class="nx">cache</span><span class="p">[</span><span class="nx">f</span><span class="p">].</span><span class="nx">content</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="c1">//...inside http.createServer:</span>
+<span class="nx">fs</span><span class="p">.</span><span class="nx">exists</span><span class="p">(</span><span class="nx">f</span><span class="p">,</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">exists</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nx">exists</span><span class="p">)</span> <span class="p">{</span>
+      <span class="nx">cacheAndDeliver</span><span class="p">(</span><span class="nx">f</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">data</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nx">err</span><span class="p">)</span> <span class="p">{</span> <span class="nx">response</span><span class="p">.</span><span class="nx">writeHead</span><span class="p">(</span><span class="mi">500</span><span class="p">);</span>
+          <span class="nx">response</span><span class="p">.</span><span class="nx">end</span><span class="p">(</span><span class="s1">&#39;Server Error!&#39;</span><span class="p">);</span>  
+          <span class="k">return</span><span class="p">;</span> 
+        <span class="p">}</span>
+        <span class="kd">var</span> <span class="nx">headers</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;Content-type&#39;</span><span class="o">:</span> <span class="nx">mimeTypes</span><span class="p">[</span><span class="nx">path</span><span class="p">.</span><span class="nx">extname</span><span class="p">(</span><span class="nx">f</span><span class="p">)]};</span>
+        <span class="nx">response</span><span class="p">.</span><span class="nx">writeHead</span><span class="p">(</span><span class="mi">200</span><span class="p">,</span> <span class="nx">headers</span><span class="p">);</span>
+        <span class="nx">response</span><span class="p">.</span><span class="nx">end</span><span class="p">(</span><span class="nx">data</span><span class="p">);</span>      
+      <span class="p">});</span>
+      <span class="k">return</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="c1">//rest of fs.exists code (404 handling)...</span>
+</code></pre>
+</div>
+
+
+<p>ok，如果我们修改了文件内容，但仍然是从缓存中读取旧的文件，直到重启服务器，所以需要监测文件内容变化。</p>
+
+<p>两个关键时间必须的知道：1.缓存时间；2.文件上次修改的时间。如果后者大于前者就需要重新缓存了。</p>
+
+<p>修改cacheAndDeliver方法为：</p>
+
+<div class="highlight"><pre><code class="javascript"><span class="kd">function</span> <span class="nx">cacheAndDeliver</span><span class="p">(</span><span class="nx">f</span><span class="p">,</span> <span class="nx">cb</span><span class="p">)</span> <span class="p">{</span>
+  <span class="nx">fs</span><span class="p">.</span><span class="nx">stat</span><span class="p">(</span><span class="nx">f</span><span class="p">,</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">stats</span><span class="p">)</span> <span class="p">{</span>
+    <span class="c1">//stats可以取三个值atime(最后访问时间)、mtime(最后内容修改时间)</span>
+    <span class="c1">//ctime(最后文件改变时间)</span>
+    <span class="kd">var</span> <span class="nx">lastChanged</span> <span class="o">=</span> <span class="nb">Date</span><span class="p">.</span><span class="nx">parse</span><span class="p">(</span><span class="nx">stats</span><span class="p">.</span><span class="nx">ctime</span><span class="p">),</span>
+        <span class="nx">isUpdated</span> <span class="o">=</span> <span class="p">(</span><span class="nx">cache</span><span class="p">[</span><span class="nx">f</span><span class="p">])</span> <span class="o">&amp;&amp;</span> <span class="nx">lastChanged</span>  <span class="o">&gt;</span> <span class="nx">cache</span><span class="p">[</span><span class="nx">f</span><span class="p">].</span><span class="nx">timestamp</span><span class="p">;</span>
+    <span class="c1">//缓存中没有、缓存需要更新</span>
+    <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">cache</span><span class="p">[</span><span class="nx">f</span><span class="p">]</span> <span class="o">||</span> <span class="nx">isUpdated</span><span class="p">)</span> <span class="p">{</span>
+      <span class="nx">fs</span><span class="p">.</span><span class="nx">readFile</span><span class="p">(</span><span class="nx">f</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">data</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">err</span><span class="p">)</span> <span class="p">{</span>
+          <span class="nx">cache</span><span class="p">[</span><span class="nx">f</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="nx">content</span><span class="o">:</span> <span class="nx">data</span><span class="err">，</span>
+            <span class="nx">timestamp</span><span class="o">:</span> <span class="nb">Date</span><span class="p">.</span><span class="nx">now</span><span class="p">()</span><span class="c1">//记录缓存时间</span>
+          <span class="p">};</span>
+        <span class="p">}</span>     
+        <span class="nx">cb</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">data</span><span class="p">);</span>
+      <span class="p">});</span>
+      <span class="k">return</span><span class="p">;</span>
+  <span class="p">});</span> <span class="c1">//end of fs.stat</span>
+<span class="p">}</span>
+</code></pre>
+</div>
+
+
+<h1>4.使用streaming来优化性能</h1>
+
+<p>readFile操作是将整个文件独到内存之后，才去response。而streaming是边读边传。</p>
+
+<p>需要使用 <em>fs.createReadStream</em> 来初始化流，它需要request和response对象，所以我们在 我们<em>http.createServer</em> 中的callback来处理。</p>
+
+<div class="highlight"><pre><code class="javascript"><span class="c1">//该代码块替换readFile</span>
+<span class="kd">var</span> <span class="nx">s</span> <span class="o">=</span> <span class="nx">fs</span><span class="p">.</span><span class="nx">createReadStream</span><span class="p">(</span><span class="nx">f</span><span class="p">).</span><span class="nx">once</span><span class="p">(</span><span class="s1">&#39;open&#39;</span><span class="p">,</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+    <span class="nx">response</span><span class="p">.</span><span class="nx">writeHead</span><span class="p">(</span><span class="mi">200</span><span class="p">,</span> <span class="nx">headers</span><span class="p">);</span>      
+    <span class="k">this</span><span class="p">.</span><span class="nx">pipe</span><span class="p">(</span><span class="nx">response</span><span class="p">);</span>
+<span class="p">}).</span><span class="nx">once</span><span class="p">(</span><span class="s1">&#39;error&#39;</span><span class="p">,</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">e</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">e</span><span class="p">);</span>
+    <span class="nx">response</span><span class="p">.</span><span class="nx">writeHead</span><span class="p">(</span><span class="mi">500</span><span class="p">);</span>
+    <span class="nx">response</span><span class="p">.</span><span class="nx">end</span><span class="p">(</span><span class="s1">&#39;Server Error!&#39;</span><span class="p">);</span>
+<span class="p">});</span>
+
+<span class="c1">//该代码块进行缓存</span>
+<span class="nx">fs</span><span class="p">.</span><span class="nx">stat</span><span class="p">(</span><span class="nx">f</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">stats</span><span class="p">)</span> <span class="p">{</span>
+  <span class="kd">var</span> <span class="nx">bufferOffset</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+  <span class="c1">//存放buffer对象</span>
+  <span class="nx">cache</span><span class="p">[</span><span class="nx">f</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="nx">content</span><span class="o">:</span> <span class="k">new</span> <span class="nx">Buffer</span><span class="p">(</span><span class="nx">stats</span><span class="p">.</span><span class="nx">size</span><span class="p">)};</span>
+  <span class="nx">s</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;data&#39;</span><span class="p">,</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">chunk</span><span class="p">){</span>
+    <span class="nx">chunk</span><span class="p">.</span><span class="nx">copy</span><span class="p">(</span><span class="nx">cache</span><span class="p">[</span><span class="nx">f</span><span class="p">].</span><span class="nx">content</span><span class="p">,</span> <span class="nx">bufferOffset</span><span class="p">);</span>
+    <span class="nx">bufferOffset</span> <span class="o">+=</span> <span class="nx">chunk</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span>
+  <span class="p">});</span>
+<span class="p">});</span>
+</code></pre>
+</div>
+
+
+<p>我们还可以设置缓存的文件大小和缓存时间：</p>
+
+<div class="highlight"><pre><code class="javascript"><span class="kd">var</span> <span class="nx">cache</span> <span class="o">=</span> <span class="p">{</span>
+  <span class="nx">store</span><span class="o">:</span> <span class="p">{},</span>
+  <span class="nx">maxSize</span> <span class="o">:</span> <span class="mi">26214400</span><span class="p">,</span> <span class="c1">//(bytes) 25mb</span>
+  <span class="nx">maxAge</span><span class="o">:</span> <span class="mi">5400</span> <span class="o">*</span> <span class="mi">1000</span><span class="p">,</span> <span class="c1">//(ms) 1 and a half hours</span>
+  <span class="nx">clean</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">now</span><span class="p">)</span> <span class="p">{</span>
+      <span class="kd">var</span> <span class="nx">that</span> <span class="o">=</span> <span class="k">this</span><span class="p">;</span>
+      <span class="nb">Object</span><span class="p">.</span><span class="nx">keys</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">store</span><span class="p">).</span><span class="nx">forEach</span><span class="p">(</span><span class="kd">function</span> <span class="p">(</span><span class="nx">file</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nx">now</span> <span class="o">&gt;</span> <span class="nx">that</span><span class="p">.</span><span class="nx">store</span><span class="p">[</span><span class="nx">file</span><span class="p">].</span><span class="nx">timestamp</span> <span class="o">+</span> <span class="nx">that</span><span class="p">.</span><span class="nx">maxAge</span><span class="p">)</span> <span class="p">{</span>
+          <span class="k">delete</span> <span class="nx">that</span><span class="p">.</span><span class="nx">store</span><span class="p">[</span><span class="nx">file</span><span class="p">];</span>      
+        <span class="p">}</span>
+      <span class="p">});</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="nx">fs</span><span class="p">.</span><span class="nx">stat</span><span class="p">(</span><span class="nx">f</span><span class="p">,</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">stats</span><span class="p">)</span> <span class="p">{</span>
+  <span class="k">if</span> <span class="p">(</span><span class="nx">stats</span><span class="p">.</span><span class="nx">size</span> <span class="o">&lt;</span> <span class="nx">cache</span><span class="p">.</span><span class="nx">maxSize</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kd">var</span> <span class="nx">bufferOffset</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="nx">cache</span><span class="p">.</span><span class="nx">store</span><span class="p">[</span><span class="nx">f</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="nx">content</span><span class="o">:</span> <span class="k">new</span> <span class="nx">Buffer</span><span class="p">(</span><span class="nx">stats</span><span class="p">.</span><span class="nx">size</span><span class="p">),</span>
+        <span class="nx">timestamp</span><span class="o">:</span> <span class="nb">Date</span><span class="p">.</span><span class="nx">now</span><span class="p">()</span> <span class="p">};</span>
+    <span class="nx">s</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;data&#39;</span><span class="p">,</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">data</span><span class="p">)</span> <span class="p">{</span>
+      <span class="nx">data</span><span class="p">.</span><span class="nx">copy</span><span class="p">(</span><span class="nx">cache</span><span class="p">.</span><span class="nx">store</span><span class="p">[</span><span class="nx">f</span><span class="p">].</span><span class="nx">content</span><span class="p">,</span> <span class="nx">bufferOffset</span><span class="p">);</span>
+      <span class="nx">bufferOffset</span> <span class="o">+=</span> <span class="nx">data</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span>
+    <span class="p">});</span>
+  <span class="p">}</span>  
+<span class="p">});</span>
+</code></pre>
+</div>
+
+
+<h1>5.安全考虑</h1>
+
+<p>如果我们请求的路径为：http://localhost:8080/../../../../../../../etc/passwd，此时我们的代码不会发现已经在请求本地磁盘上的文件了。</p>
+
+<p>可以使用<em>path.normalize</em>方法，它相对来说会比较安全，它可以去掉重复的../和/。</p>
+
+<p>可以列一个白名单，请求的所有文件都需要在该白名单中检测。</p>
+
+<p>可以为请求过来的path加上一个后缀，而我们的文件就是以该后缀结尾。</p>
+</div>
+	<div id="disqus_thread"></div>
+<script type="text/javascript">
+    /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+    var disqus_shortname = 'webexpressor'; // required: replace example with your forum shortname
+
+    /* * * DON'T EDIT BELOW THIS LINE * * */
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+        
+
+</div>
+</section>
+<aside role="main">
+	<div id="table-content"></div>
+</aside>
+
+
+
+
+		</div>
+	
+		
+			<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+			<script>window.jQuery || document.write('<script src="/js/jquery-1.7.2.min.js"><\/script>')</script>
+			<script src="/js/jquery.localscroll-1.2.7-min.js"></script>
+			<script src="/js/jquery.scrollTo-1.4.2-min.js"></script>
+			<script src="/js/app.js"></script>
+			<script>
+				/* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+		        var disqus_shortname = 'webexpressor'; // required: replace example with your forum shortname
+		        /* * * DON'T EDIT BELOW THIS LINE * * */
+		        (function () {
+		            var s = document.createElement('script'); s.async = true;
+		            s.type = 'text/javascript';
+		            s.src = 'http://' + disqus_shortname + '.disqus.com/count.js';
+		            (document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
+		        }());
+			</script>
+		
+		<script type="text/javascript">
+			var _bdhmProtocol = (("https:" == document.location.protocol) ? " https://" : " http://");
+			document.write(unescape("%3Cscript src='" + _bdhmProtocol + "hm.baidu.com/h.js%3F512f2c73d9bfeaa9a55e270c5405a590' type='text/javascript'%3E%3C/script%3E"));
+
+		  var _gaq = _gaq || [];
+		  _gaq.push(['_setAccount', 'UA-34957367-1']);
+		  _gaq.push(['_trackPageview']);
+
+		  (function() {
+		    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+		    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+		    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+		  })();
+
+        </script>
+
+	</body>
+</html>

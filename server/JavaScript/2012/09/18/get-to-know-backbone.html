@@ -1,0 +1,324 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8"/>
+		<meta name="author" content="Liu Dong" />
+		<meta property="wb:webmaster" content="95df5d741703d83b" />
+		<!--[if lt IE 9]>
+	      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+	    <![endif]-->
+		<link rel="stylesheet" href="/css/base.css" type="text/css" />
+		<link rel="stylesheet" href="/css/syntax.css" type="text/css" />
+		<title>Get To Know Backbone</title>
+	</head>
+	<body>
+		<header role="main">
+			<div>
+				<a href="/"><span class="threeD">WebExpressor</span></a>
+				<span class="right"><script type="text/javascript" charset="utf-8">
+(function(){
+  var _w = 106 , _h = 24;
+  var param = {
+    url:location.href,
+    type:'5',
+    count:'', /**是否显示分享数，1显示(可选)*/
+    appkey:'', /**您申请的应用appkey,显示分享来源(可选)*/
+    title:'介绍Backbone的主要组件：Model、View、Collection、Router', /**分享的文字内容(可选，默认为所在页面的title)*/
+    pic:'', /**分享图片的路径(可选)*/
+    ralateUid:'1769773192', /**关联用户的UID，分享微博会@该用户(可选)*/
+  language:'zh_cn', /**设置语言，zh_cn|zh_tw(可选)*/
+    rnd:new Date().valueOf()
+  }
+  var temp = [];
+  for( var p in param ){
+    temp.push(p + '=' + encodeURIComponent( param[p] || '' ) )
+  }
+  document.write('<iframe allowTransparency="true" frameborder="0" scrolling="no" src="http://hits.sinajs.cn/A1/weiboshare.html?' + temp.join('&') + '" width="'+ _w+'" height="'+_h+'"></iframe>')
+})()
+</script></span>
+				<span class="right"><iframe width="63" height="24" frameborder="0" allowtransparency="true" marginwidth="0" marginheight="0" scrolling="no" border="0" src="http://widget.weibo.com/relationship/followbutton.php?language=zh_cn&width=63&height=24&uid=1769773192&style=1&btn=red&dpc=1"></iframe></span>
+			</div>
+		</header>
+		<div id="content" role="main">
+			<section role="main">
+<div class="page">
+	<header>
+		<div class="title">Get To Know Backbone</div>
+		<div class="info">
+			分类：JavaScript  标签：backbone
+		</div>
+		<div class="description">介绍Backbone的主要组件：Model、View、Collection、Router</div>
+	</header>
+	<div class="content"><h1>1. 简介</h1>
+
+<p>Backbone主要的组件是Model、View、Collection，也是通过它们来构建web应用的。Model支持key-value的绑定和自定义的事件，Collection提供了丰富的集合操作，View用来和用户交互，接收用户事件，呈现数据。</p>
+
+<p>Backbone项目托管在<a href="https://github.com/documentcloud/backbone/">github</a>上。</p>
+
+<p>Backbone唯一严重依赖的是<a href="http://documentcloud.github.com/underscore/">Underscore.js</a>(>1.3.1)，与<a href="http://jquery.com">jQuery</a>(>1.4.2)，<a href="http://zeptojs.com">zepto</a>兼容。</p>
+
+<p><a href="http://documentcloud.github.com/backbone/">Backbone官方文档</a></p>
+
+<h1>2. Backbone.Model</h1>
+
+<p>Model负责模型的定义，它提供数据验证，属性运算，属性绑定等功能。</p>
+
+<h2>2.1 模型的创建</h2>
+
+<div class="highlight"><pre><code class="javascript"><span class="c1">//创建一个Todo模型</span>
+<span class="nb">window</span><span class="p">.</span><span class="nx">Todo</span> <span class="o">=</span> <span class="nx">Backbone</span><span class="p">.</span><span class="nx">Model</span><span class="p">.</span><span class="nx">extend</span><span class="p">({</span>
+    <span class="nx">idAttribute</span><span class="o">:</span> <span class="s1">&#39;_id&#39;</span><span class="p">,</span>
+    <span class="nx">defaults</span><span class="o">:</span><span class="p">{</span>
+        <span class="nx">done</span><span class="o">:</span> <span class="kc">false</span>
+    <span class="p">},</span>
+    <span class="nx">toggle</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+      <span class="k">this</span><span class="p">.</span><span class="nx">save</span><span class="p">({</span><span class="nx">done</span><span class="o">:</span> <span class="o">!</span><span class="k">this</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s2">&quot;done&quot;</span><span class="p">)});</span>
+    <span class="p">}</span>
+<span class="p">});</span>
+</code></pre>
+</div>
+
+
+<ul>
+<li>模型创建时会最先调用initialize方法；</li>
+<li>defaults属性可以设置默认值；</li>
+<li>可以通过为属性绑定change事件来监听其值的改变</li>
+<li>与服务器交互的方法fetch、save、destroy</li>
+</ul>
+
+
+<h2>2.2 Model Demo：</h2>
+
+<div class="highlight"><pre><code class="javascript"><span class="c1">//创建Person模型</span>
+<span class="nx">Person</span> <span class="o">=</span> <span class="nx">Backbone</span><span class="p">.</span><span class="nx">Model</span><span class="p">.</span><span class="nx">extend</span><span class="p">({</span> 
+    <span class="c1">//设置默认值 </span>
+    <span class="nx">defaults</span><span class="o">:</span><span class="p">{</span>  
+        <span class="nx">sex</span><span class="o">:</span><span class="s2">&quot;male&quot;</span>  
+    <span class="p">},</span> 
+    <span class="c1">//初始化时常用来做一些类似本例的工作</span>
+    <span class="nx">initialize</span> <span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>  
+        <span class="c1">//为属性绑定事件  </span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">bind</span><span class="p">(</span><span class="s2">&quot;change:name&quot;</span><span class="p">,</span><span class="kd">function</span><span class="p">(){</span>  
+            <span class="nx">alert</span><span class="p">(</span><span class="s2">&quot;更改后的名字为：&quot;</span><span class="o">+</span><span class="k">this</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s2">&quot;name&quot;</span><span class="p">));</span>  
+        <span class="p">});</span>  
+        <span class="k">this</span><span class="p">.</span><span class="nx">bind</span><span class="p">(</span><span class="s2">&quot;error&quot;</span><span class="p">,</span><span class="kd">function</span><span class="p">(</span><span class="nx">model</span><span class="p">,</span><span class="nx">error</span><span class="p">){</span>  
+            <span class="nx">alert</span><span class="p">(</span><span class="nx">error</span><span class="p">);</span>  
+        <span class="p">});</span>  
+    <span class="p">},</span> 
+    <span class="c1">//数据合法性的验证 </span>
+    <span class="nx">validate</span><span class="o">:</span><span class="kd">function</span><span class="p">(</span><span class="nx">attributes</span><span class="p">){</span>  
+        <span class="k">if</span><span class="p">(</span><span class="nx">attributes</span><span class="p">.</span><span class="nx">sex</span> <span class="o">!=</span> <span class="s2">&quot;male&quot;</span> <span class="o">||</span> <span class="nx">attributes</span><span class="p">.</span><span class="nx">sex</span> <span class="o">!=</span> <span class="s2">&quot;female&quot;</span><span class="p">){</span>  
+            <span class="k">return</span> <span class="s2">&quot;Sex must be male or female.&quot;</span><span class="p">;</span>  
+        <span class="p">}</span>  
+    <span class="p">},</span>  
+    <span class="c1">//用户自定义的方法</span>
+    <span class="nx">changeName</span><span class="o">:</span><span class="kd">function</span><span class="p">(</span><span class="nx">name</span><span class="p">){</span>  
+        <span class="k">this</span><span class="p">.</span><span class="nx">set</span><span class="p">({</span><span class="nx">name</span><span class="o">:</span><span class="nx">name</span><span class="p">});</span>  
+    <span class="p">}</span>  
+<span class="p">});</span>  
+
+<span class="c1">// Model的属性在创建的时候传入</span>
+<span class="kd">var</span> <span class="nx">person</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Person</span><span class="p">({</span> <span class="nx">name</span> <span class="o">:</span> <span class="s2">&quot;Thomas&quot;</span><span class="p">,</span>  <span class="nx">age</span> <span class="o">:</span> <span class="mi">67</span> <span class="p">});</span> 
+</code></pre>
+</div>
+
+
+<h1>3. Backbone.View</h1>
+
+<p>View主要负责数据的渲染和接收用户的输入</p>
+
+<h2>3.1 数据渲染</h2>
+
+<p>数据渲染需要渲染的template和插入数据的位置；template可以使用任何一种，如<a href="http://mustache.github.com/">Mustache</a>,也可以使用underscore中自带的；
+插入数据的位置是通过el来确定的。</p>
+
+<div class="highlight"><pre><code class="javascript"><span class="o">&lt;</span><span class="nx">div</span> <span class="nx">id</span><span class="o">=</span><span class="s2">&quot;search_container&quot;</span><span class="o">&gt;&lt;</span><span class="err">/div&gt;</span>
+
+<span class="o">&lt;</span><span class="nx">script</span> <span class="nx">type</span><span class="o">=</span><span class="s2">&quot;text/javascript&quot;</span><span class="o">&gt;</span>
+    <span class="nx">SearchView</span> <span class="o">=</span> <span class="nx">Backbone</span><span class="p">.</span><span class="nx">View</span><span class="p">.</span><span class="nx">extend</span><span class="p">({</span>
+        <span class="c1">//制定插入数据的位置</span>
+        <span class="nx">el</span><span class="o">:</span> <span class="nx">$</span><span class="p">(</span><span class="s1">&#39;#search_container&#39;</span><span class="p">),</span>
+        <span class="nx">initialize</span><span class="o">:</span> <span class="kd">function</span><span class="p">(){</span>
+            <span class="k">this</span><span class="p">.</span><span class="nx">render</span><span class="p">();</span>
+        <span class="p">},</span>
+        <span class="nx">render</span><span class="o">:</span> <span class="kd">function</span><span class="p">(){</span>
+            <span class="c1">// 使用underscore模板编译为html</span>
+            <span class="kd">var</span> <span class="nx">template</span> <span class="o">=</span> <span class="nx">_</span><span class="p">.</span><span class="nx">template</span><span class="p">(</span> <span class="nx">$</span><span class="p">(</span><span class="s1">&#39;#search_template&#39;</span><span class="p">).</span><span class="nx">html</span><span class="p">(),{});</span>
+            <span class="c1">// 插入到DOM中 ， this.el 和 this.$el的区别就是前者返回Dom元素，后者返回JQuery对象</span>
+            <span class="c1">// 即$(this.el) == this.$el</span>
+            <span class="k">this</span><span class="p">.</span><span class="nx">$el</span><span class="p">.</span><span class="nx">html</span><span class="p">(</span><span class="nx">template</span><span class="p">);</span>
+        <span class="p">}</span>
+    <span class="p">});</span>
+    
+    <span class="kd">var</span> <span class="nx">search_view</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">SearchView</span><span class="p">;</span>
+<span class="o">&lt;</span><span class="err">/script&gt;</span>
+
+<span class="c1">//模板文件</span>
+<span class="o">&lt;</span><span class="nx">script</span> <span class="nx">type</span><span class="o">=</span><span class="s2">&quot;text/template&quot;</span> <span class="nx">id</span><span class="o">=</span><span class="s2">&quot;search_template&quot;</span><span class="o">&gt;</span>
+    <span class="o">&lt;</span><span class="nx">label</span><span class="o">&gt;</span><span class="nx">Search</span><span class="o">&lt;</span><span class="err">/label&gt;</span>
+    <span class="o">&lt;</span><span class="nx">input</span> <span class="nx">type</span><span class="o">=</span><span class="s2">&quot;text&quot;</span> <span class="nx">id</span><span class="o">=</span><span class="s2">&quot;search_input&quot;</span> <span class="o">/&gt;</span>
+    <span class="o">&lt;</span><span class="nx">input</span> <span class="nx">type</span><span class="o">=</span><span class="s2">&quot;button&quot;</span> <span class="nx">id</span><span class="o">=</span><span class="s2">&quot;search_button&quot;</span> <span class="nx">value</span><span class="o">=</span><span class="s2">&quot;Search&quot;</span> <span class="o">/&gt;</span>
+<span class="o">&lt;</span><span class="err">/script&gt;</span>
+</code></pre>
+</div>
+
+
+<h2>3.2 接收用户的输入</h2>
+
+<p>实现途径就是通过绑定事件，完全支持<a href="http://www.tutorialspoint.com/html5/html5_events.htm">官方的事件类型</a>如下：</p>
+
+<div class="highlight"><pre><code class="javascript"><span class="o">&lt;</span><span class="nx">div</span> <span class="nx">id</span><span class="o">=</span><span class="s2">&quot;search_container&quot;</span><span class="o">&gt;&lt;</span><span class="err">/div&gt;</span>
+
+<span class="o">&lt;</span><span class="nx">script</span> <span class="nx">type</span><span class="o">=</span><span class="s2">&quot;text/javascript&quot;</span><span class="o">&gt;</span>
+    <span class="nx">SearchView</span> <span class="o">=</span> <span class="nx">Backbone</span><span class="p">.</span><span class="nx">View</span><span class="p">.</span><span class="nx">extend</span><span class="p">({</span>
+        <span class="c1">//制定插入数据的位置</span>
+        <span class="nx">el</span><span class="o">:</span> <span class="nx">$</span><span class="p">(</span><span class="s1">&#39;#search_container&#39;</span><span class="p">),</span>
+        <span class="nx">initialize</span><span class="o">:</span> <span class="kd">function</span><span class="p">(){</span>
+            <span class="k">this</span><span class="p">.</span><span class="nx">render</span><span class="p">();</span>
+        <span class="p">},</span>
+        <span class="nx">events</span><span class="o">:</span> <span class="p">{</span>
+            <span class="s2">&quot;click input[type=button]&quot;</span><span class="o">:</span> <span class="s2">&quot;doSearch&quot;</span>
+        <span class="p">},</span>
+        <span class="nx">render</span><span class="o">:</span> <span class="kd">function</span><span class="p">(){</span>
+            <span class="c1">// 使用underscore模板编译为html</span>
+            <span class="kd">var</span> <span class="nx">template</span> <span class="o">=</span> <span class="nx">_</span><span class="p">.</span><span class="nx">template</span><span class="p">(</span> <span class="nx">$</span><span class="p">(</span><span class="s1">&#39;#search_template&#39;</span><span class="p">).</span><span class="nx">html</span><span class="p">(),{});</span>
+            <span class="c1">// 插入到DOM中 ， this.el 和 this.$el的区别就是前者返回Dom元素，后者返回JQuery对象</span>
+            <span class="c1">// 即$(this.el) == this.$el</span>
+            <span class="k">this</span><span class="p">.</span><span class="nx">$el</span><span class="p">.</span><span class="nx">html</span><span class="p">(</span><span class="nx">template</span><span class="p">);</span>
+        <span class="p">},</span>
+        <span class="nx">doSearch</span><span class="o">:</span> <span class="kd">function</span><span class="p">(){</span>
+            <span class="nx">alert</span><span class="p">(</span><span class="s1">&#39;doSearch&#39;</span><span class="p">);</span>
+        <span class="p">}</span>
+    <span class="p">});</span>
+    
+    <span class="kd">var</span> <span class="nx">search_view</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">SearchView</span><span class="p">;</span>
+<span class="o">&lt;</span><span class="err">/script&gt;</span>
+
+<span class="c1">//模板文件</span>
+<span class="o">&lt;</span><span class="nx">script</span> <span class="nx">type</span><span class="o">=</span><span class="s2">&quot;text/template&quot;</span> <span class="nx">id</span><span class="o">=</span><span class="s2">&quot;search_template&quot;</span><span class="o">&gt;</span>
+    <span class="o">&lt;</span><span class="nx">label</span><span class="o">&gt;</span><span class="nx">Search</span><span class="o">&lt;</span><span class="err">/label&gt;</span>
+    <span class="o">&lt;</span><span class="nx">input</span> <span class="nx">type</span><span class="o">=</span><span class="s2">&quot;text&quot;</span> <span class="nx">id</span><span class="o">=</span><span class="s2">&quot;search_input&quot;</span> <span class="o">/&gt;</span>
+    <span class="o">&lt;</span><span class="nx">input</span> <span class="nx">type</span><span class="o">=</span><span class="s2">&quot;button&quot;</span> <span class="nx">id</span><span class="o">=</span><span class="s2">&quot;search_button&quot;</span> <span class="nx">value</span><span class="o">=</span><span class="s2">&quot;Search&quot;</span> <span class="o">/&gt;</span>
+<span class="o">&lt;</span><span class="err">/script&gt;</span>
+</code></pre>
+</div>
+
+
+<h1>4. Backbone.Collection</h1>
+
+<p>Collection就是有序的models的集合，它可以绑定change事件来监听model的改变。其中的fetch方法，用来请求服务器端的数据，当server端返回success，则会触发reset方法。url属性可以用来设置请求服务器的根路径。</p>
+
+<div class="highlight"><pre><code class="javascript"><span class="c1">//创建一个存放 Todo Model的集合，并且设置请求服务器的根路径为‘/todos’</span>
+<span class="nb">window</span><span class="p">.</span><span class="nx">TodoList</span> <span class="o">=</span> <span class="nx">Backbone</span><span class="p">.</span><span class="nx">Collection</span><span class="p">.</span><span class="nx">extend</span><span class="p">({</span>
+    <span class="nx">model</span><span class="o">:</span> <span class="nx">Todo</span><span class="p">,</span>
+    <span class="nx">url</span><span class="o">:</span> <span class="s1">&#39;/todos&#39;</span>
+<span class="p">});</span>
+
+<span class="nb">window</span><span class="p">.</span><span class="nx">Todos</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">TodoList</span><span class="p">;</span>
+
+<span class="c1">//在创建时就会执行fetch方法，发出一个GET请求</span>
+<span class="nb">window</span><span class="p">.</span><span class="nx">AppView</span> <span class="o">=</span> <span class="nx">Backbone</span><span class="p">.</span><span class="nx">View</span><span class="p">.</span><span class="nx">extend</span><span class="p">({</span>
+    <span class="nx">initialize</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+        <span class="nx">Todos</span><span class="p">.</span><span class="nx">bind</span><span class="p">(</span><span class="s1">&#39;reset&#39;</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">addAll</span><span class="p">,</span> <span class="k">this</span><span class="p">);</span>
+        <span class="nx">Todos</span><span class="p">.</span><span class="nx">fetch</span><span class="p">();</span>
+    <span class="p">},</span>
+    <span class="nx">addAll</span><span class="o">:</span> <span class="kd">function</span><span class="p">(){</span>
+        <span class="c1">//通过reset来触发</span>
+    <span class="p">}</span>
+<span class="p">});</span>
+</code></pre>
+</div>
+
+
+<p>另外Collection中包含了underscore中的很多utils，方便我们的使用。</p>
+
+<h1>5. Backbone.Router</h1>
+
+<p>Router可以解决Singal App中遇到的URL state的问题。例如经常用到的hash，如果用户浏览到某一处时，想要收藏起来，结果发现下次打开时还是进入到了主页面，这就是URL State丢失。</p>
+
+<p>Router可以和客户端的action、event建立联系，谨记当Router创建好之后，一定要调用Backbone.history.start()。</p>
+
+<div class="highlight"><pre><code class="javascript"><span class="kd">var</span> <span class="nx">Workspace</span> <span class="o">=</span> <span class="nx">Backbone</span><span class="p">.</span><span class="nx">Router</span><span class="p">.</span><span class="nx">extend</span><span class="p">({</span>
+  <span class="nx">routes</span><span class="o">:</span> <span class="p">{</span>
+    <span class="s2">&quot;help&quot;</span><span class="o">:</span>                 <span class="s2">&quot;help&quot;</span><span class="p">,</span>    <span class="c1">// #help</span>
+    <span class="s2">&quot;search/:query&quot;</span><span class="o">:</span>        <span class="s2">&quot;search&quot;</span><span class="p">,</span>  <span class="c1">// #search/kiwis</span>
+    <span class="s2">&quot;search/:query/p:page&quot;</span><span class="o">:</span> <span class="s2">&quot;search&quot;</span>   <span class="c1">// #search/kiwis/p7</span>
+  <span class="p">},</span>
+
+  <span class="nx">help</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+    <span class="p">...</span>
+  <span class="p">},</span>
+
+  <span class="nx">search</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">query</span><span class="p">,</span> <span class="nx">page</span><span class="p">)</span> <span class="p">{</span>
+    <span class="p">...</span>
+  <span class="p">}</span>
+
+<span class="p">});</span>  
+</code></pre>
+</div>
+
+
+
+</div>
+	<div id="disqus_thread"></div>
+<script type="text/javascript">
+    /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+    var disqus_shortname = 'webexpressor'; // required: replace example with your forum shortname
+
+    /* * * DON'T EDIT BELOW THIS LINE * * */
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+        
+
+</div>
+</section>
+<aside role="main">
+	<div id="table-content"></div>
+</aside>
+
+
+
+
+		</div>
+	
+		
+			<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+			<script>window.jQuery || document.write('<script src="/js/jquery-1.7.2.min.js"><\/script>')</script>
+			<script src="/js/jquery.localscroll-1.2.7-min.js"></script>
+			<script src="/js/jquery.scrollTo-1.4.2-min.js"></script>
+			<script src="/js/app.js"></script>
+			<script>
+				/* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+		        var disqus_shortname = 'webexpressor'; // required: replace example with your forum shortname
+		        /* * * DON'T EDIT BELOW THIS LINE * * */
+		        (function () {
+		            var s = document.createElement('script'); s.async = true;
+		            s.type = 'text/javascript';
+		            s.src = 'http://' + disqus_shortname + '.disqus.com/count.js';
+		            (document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
+		        }());
+			</script>
+		
+		<script type="text/javascript">
+			var _bdhmProtocol = (("https:" == document.location.protocol) ? " https://" : " http://");
+			document.write(unescape("%3Cscript src='" + _bdhmProtocol + "hm.baidu.com/h.js%3F512f2c73d9bfeaa9a55e270c5405a590' type='text/javascript'%3E%3C/script%3E"));
+
+		  var _gaq = _gaq || [];
+		  _gaq.push(['_setAccount', 'UA-34957367-1']);
+		  _gaq.push(['_trackPageview']);
+
+		  (function() {
+		    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+		    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+		    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+		  })();
+
+        </script>
+
+	</body>
+</html>

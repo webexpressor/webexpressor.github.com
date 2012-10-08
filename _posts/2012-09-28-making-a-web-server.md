@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "Ch01:Making a Web Server"
+title: "Ch01:创建一个Web服务器"
 category: NodeJs
 tags: [nodejs-cookbook]
 description: "不像Java那样，nodejs中的web server和code是在一起的，也没有tomcat那么复杂的配置。通过几行代码就可以启动服务器。"
@@ -13,8 +13,8 @@ description: "不像Java那样，nodejs中的web server和code是在一起的，
 {% highlight javascript %}
 var http = require('http');
 http.createServer(function (request, response) {
-	response.writeHead(200, {'Content-Type': 'text/html'}); 
-	response.end('Woohoo!');
+  response.writeHead(200, {'Content-Type': 'text/html'}); 
+  response.end('Woohoo!');
 }).listen(8080);
 {% endhighlight %}
 为了方便调试，安装 [hotnode]()
