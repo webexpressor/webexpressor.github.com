@@ -184,6 +184,7 @@ div.subject:nth-child(3n+1) {
 	margin: 10px 0px;
 }
 .page .content{
+	padding-bottom: 15px;
 	border-bottom: 1px solid #ccc;
 	margin: 20px 0px;
 }

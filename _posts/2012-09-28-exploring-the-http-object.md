@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "Ch02:探索HTTP对象"
+title: "探索Node中的HTTP对象"
 category: "NodeJs"
 tags: [nodejs-cookbook]
 description: "Http对象不仅可以处理服务器端逻辑，而且还可以实现客户端的功能"
