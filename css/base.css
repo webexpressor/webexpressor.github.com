@@ -86,7 +86,7 @@ div.subject:nth-child(3n+1) {
 /*post页面样式*/
 .post{
 	background: #f2f2f2;
-	margin-bottom: 40px;
+	margin-bottom: 20px;
 	padding: 15px 20px 15px 80px;
 	box-shadow: 0 0 5px rgba(0,0,0,0.2);
 	border: 1px solid #ccc;
@@ -118,20 +118,21 @@ div.subject:nth-child(3n+1) {
 
 .post a{
 	display: block;
-	font-size: 24px;
-	padding: 4px 0px;
+	font-size: 18px;
+	/*padding: 4px 0px;*/
 	/*color: #F9600A;*/
-	font-size: 30px;
 }
 .post .content{
 	border-bottom:1px dotted #a9a9a9;
 }
 .post .content .description{
-	padding: 10px 0px 20px 0px;
+	font-size: 16px;
+    color: grey;
+	padding: 5px 0px 10px 0px;
 	line-height: 20px;
 }
 .post .info{
-	padding-top: 15px;
+	padding-top: 10px;
 }
 
 /* 详情页面样式 */
