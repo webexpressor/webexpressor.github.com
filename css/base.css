@@ -35,12 +35,12 @@ header[role="main"] div{
 header[role="main"] span.left{
 	float: left;
 	display: block;
-	margin: 0px 10px;
+	margin: 0px 2px;
 }
 header[role="main"] span.right{
 	float: right;
 	display: block;
-	margin: 0px 10px;
+	margin: 0px 2px;
 }
 #content[role="main"]{
 	width:1020px;

@@ -1,9 +1,12 @@
+---
+layout: nil
+---
 <?xml version="1.0" encoding="UTF-8"?>
 <rss version="2.0">
     <channel>
-        <title>{{ site.title }} | {{ site.tagline }}</title>
+        <title>WebExpressor's Blog</title>
         <description>WebExpressor's Blog</description>
-        <link>{{ site.url }}{{ site.baseurl }}</link>
+        <link>http://webexpressor.github.com</link>
         {% for post in site.posts %}
             <item>
                 <title>{{ post.title }}</title>
