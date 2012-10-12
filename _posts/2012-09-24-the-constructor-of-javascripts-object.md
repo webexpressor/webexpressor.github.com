@@ -3,7 +3,7 @@ layout: page
 title: "JavaScript对象的constructor属性介绍"
 category: JavaScript
 tags: [constructor]
-description: "深刻理解这就话：constructor属性始终指向创建当前对象的构造函数"
+description: "深刻理解这句话：constructor属性始终指向创建当前对象的构造函数"
 ---
 
 *constructor*属性始终指向创建当前对象的构造函数。比如下面例子：
