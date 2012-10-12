@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "Get To Know Backbone"
+title: "初步了解Backbone"
 category: JavaScript
 tags: [backbone]
 description: "介绍Backbone的主要组件：Model、View、Collection、Router"

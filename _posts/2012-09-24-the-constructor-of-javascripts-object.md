@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "The Constructor of JavaScript's Object"
+title: "JavaScript对象的constructor属性介绍"
 category: JavaScript
 tags: [constructor]
 description: "深刻理解这就话：constructor属性始终指向创建当前对象的构造函数"

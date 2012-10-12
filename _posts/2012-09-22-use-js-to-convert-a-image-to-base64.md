@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "Use Js to Convert a Image to Base64"
+title: "使用JavaScript来得到图片的base64编码"
 category: JavaScript
 tags: [base64]
 description: "使用JavaScript调用canvas.toDataURL()可以获得图片的base64编码" 
