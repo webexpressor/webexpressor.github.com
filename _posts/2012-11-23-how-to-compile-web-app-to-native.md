@@ -9,7 +9,7 @@ description: "介绍怎么将web mobile app项目打包成客户端"
 # 1.准备工作
 
 ## 1.1 编写你的应用
-你可以通过JavaScript、Css和HTML来编写[SPA(单页应用程序)](http://en.wikipedia.org/wiki/Single-page_application)，页面的入口为index.html。也可以使用Mobile Framework，如[Sencha Touch]()、[jQtouch]()、[JQuery Mobile]()。
+你可以通过JavaScript、Css和HTML来编写[SPA(单页应用程序)](http://en.wikipedia.org/wiki/Single-page_application)，页面的入口为index.html。也可以使用Mobile Framework，如[Sencha Touch](http://www.sencha.com/products/touch)、[jQtouch](http://jqtouch.com)、[JQuery Mobile](http://jquerymobile.com)。
 
 ## 1.2 配置config.xml文件
 ### 1.2.1 配置包名
