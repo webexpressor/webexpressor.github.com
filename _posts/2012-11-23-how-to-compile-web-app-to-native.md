@@ -9,10 +9,27 @@ description: "介绍怎么将web mobile app项目打包成客户端"
 # 1.准备工作
 
 ## 1.1 编写你的应用
-你可以通过JavaScript、Css和HTML来编写[SPA(单页应用程序)](http://en.wikipedia.org/wiki/Single-page_application)，页面的入口为index.html。
+你可以通过JavaScript、Css和HTML来编写[SPA(单页应用程序)](http://en.wikipedia.org/wiki/Single-page_application)，页面的入口为index.html。也可以使用Mobile Framework，如[Sencha Touch]()、[jQtouch]()、[JQuery Mobile]()。
 
-## 1.2 添加程序图标
-在你的项目根路径下添加icon.png图片，大小为114*114px。
+## 1.2 配置config.xml文件
+### 1.2.1 配置包名
+通过widget标签的id属性可以配置，它是应用的唯一标记。
+
+### 1.2.2 配置版本
+通过widget标签的version属性可以配置。
+
+### 1.2.3 配置程序名
+通过name标签进行配置，如：
+{%highlight javascript%}
+<name>Demo</name>
+{%endhighlight%}
+
+### 1.2.4 配置程序icon
+通过icon标签可以配置，如：
+{%highlight javascript%}
+<icon src="icon.png"/>
+{%endhighlight%}
+把icon图标放到和index.html文件相同的目录即可，大小可以为114*114px。
 
 ## 1.3 调用手机功能
 该编译环境使用了开源项目[PhoneGap](http://phonegap.com)，因此调用手机API可以参见：
@@ -44,8 +61,9 @@ function onFail(message) {
 你的应用中可以包含以下内容：
 
 * index.html(必须)
+* config.xml(必须)
+* icon.png：应用程序图标(必须)
 * 其它资源文件： JavaScrpit、Css文件、图片、多媒体文件等等
-* icon.png：应用程序图标
 
 最后将你的应用压缩为zip格式的文件进行上传。
 
