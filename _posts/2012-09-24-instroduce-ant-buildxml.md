@@ -3,7 +3,7 @@ layout: page
 title: "ANT build.xml文件详解"
 category: Ant
 tags: [ant]
-description: ""
+description: "build.xml文件详解"
 ---
 
 本文转载自[李长春个人博客](http://my.oschina.net/willSoft/blog/29314)

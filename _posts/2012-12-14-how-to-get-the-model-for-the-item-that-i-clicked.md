@@ -12,6 +12,7 @@ published: true
 
 1. list和item用一个view来渲染
 
+
 2. list和item分别用各自的view来渲染
 
 下面举例来说明，场景为将collection中的假数据渲染到id为showIt的div中。

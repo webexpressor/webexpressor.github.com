@@ -8,7 +8,7 @@ description: "使用perl来读取文件，并写入到新文件中"
 
 # 使用Perl从文件中读取字符串，一般有两种方法：
 
-1.一次性将文件中的所有内容读入一个数组中(该方法适合小文件)：
+* 1. 一次性将文件中的所有内容读入一个数组中(该方法适合小文件)：
 
 {%highlight javascript%}
 open(FILE,"filename")||die"can not open the file: $!";
@@ -20,7 +20,7 @@ foreach $eachline (@filelist) {
 close FILE;
 {%endhighlight%}
 
-2.一次从文件中读取一行，一行行地读取和处理(读取大文件时比较方便)：
+* 2. 一次从文件中读取一行，一行行地读取和处理(读取大文件时比较方便)：
 {%highlight javascript%}
 open(FILE,"filename")||die"can not open the file: $!";
 
